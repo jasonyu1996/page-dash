@@ -7,11 +7,8 @@
         btn.style.top = y + 'px';
         return btn;
     };
-    var setVis = function(btn){
-        if(document.documentElement.scrollTop > vis_eps)
-            btn.style.display = '';
-        else 
-            btn.style.display = 'none';
+    var getVis = function(){
+        return document.documentElement.scrollTop > vis_eps;
     };
     var PageDash = function(){
         PageDash.prototype.init = function(arg){
@@ -33,15 +30,68 @@
                 y = window.innerHeight;
             }
             var btn = createButton(x, y);
-            setVis(btn);
-            document.body.appendChild(btn);
+            var vis = getVis();
+            if(!vis){
+                btn.style.opacity = '0.0';
+                btn.style.display = "none";
+            } else{
+                btn.style.opacity = '1.0';
+                btn.style.display = "";
+            }
+            var sid = null; //scrolling instance
+            var fid = null; //fading instance
+            var clearScroll = function(){
+                if(sid){
+                    clearInterval(sid);
+                    sid = null;
+                }
+            };
+            var clearFade = function(){
+                if(fid){
+                    clearInterval(fid);
+                    fid = null;
+                }
+            };
             btn.addEventListener('click', function(){
-                document.documentElement.scrollTop = 0;
+                clearScroll();
+                sid = setInterval(function(){
+                    document.documentElement.scrollTop -= Math.max(1, Math.min(document.documentElement.scrollTop / 20, 10));
+                    if(document.documentElement.scrollTop == 0)
+                        clearScroll();
+                }, 10);
             }, false);
             window.addEventListener('scroll', function(){
-              //  console.log('HA');
-                setVis(btn);
+                var nvis = getVis();
+                if(nvis ^ vis){
+                    vis = nvis;
+                    clearFade();
+                    if(nvis){
+                        btn.style.display = "";
+                        var o = Number(btn.style.opacity) * 100;
+                        fid = setInterval(function(){
+                            o += 3;
+                            if(o > 100)
+                                o = 100;
+                            btn.style.opacity = String(o / 100.0);
+                            if(fid == 100)
+                                clearFade();
+                        }, 10);
+                    } else{
+                        var o = Number(btn.style.opacity) * 100;
+                        fid = setInterval(function(){
+                            o -= 3;
+                            if(o < 0)
+                                o = 0;
+                            btn.style.opacity = String(o / 100.0);
+                            if(fid == 0){
+                                btn.style.display = "none";
+                                clearFade();
+                            }
+                        }, 10);
+                    }
+                }
             }, false);
+            document.body.appendChild(btn);
         };
     };
     window.PageDash = new PageDash();
