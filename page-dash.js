@@ -1,10 +1,24 @@
 (function(vis_eps){ //vis_eps specifies the threshold (minimum gap on top scrolled required for the button to be visible)
-    var createButton = function(x, y){
+    var createButton = function(x, y, p){
         var btn = document.createElement('div');
         btn.className = 'page-dash-button';
         btn.style.position = 'fixed';
-        btn.style.left = x + 'px';
-        btn.style.top = y + 'px';
+        if(p == 0){
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        } else if(p == 1){
+            btn.style.left = '0';
+            btn.style.top = '0';
+        } else if(p == 2){
+            btn.style.left = '0';
+            btn.style.bottom = '0';
+        } else if(p == 3){
+            btn.style.right = '0';
+            btn.style.top = '0';
+        } else{
+            btn.style.right = '0';
+            btn.style.bottom = '0';
+        }
         return btn;
     };
     var getVis = function(){
@@ -12,24 +26,20 @@
     };
     var PageDash = function(){
         PageDash.prototype.init = function(arg){
-            var x, y;
+            var x = 0, y = 0, p = 0;
             if(arg.hasOwnProperty('x') && arg.hasOwnProperty('y')){
                 x = Number(arg.x);
                 y = Number(arg.y);
             } else if(arg.hasOwnProperty('LeftTop') && arg.LeftTop){
-                x = 0;
-                y = 0;
+                p = 1;
             } else if(arg.hasOwnProperty('LeftBottom') && arg.leftBottom){
-                x = 0;
-                y = window.innerHeight;
+                p = 2;
             } else if(arg.hasOwnProperty('RightTop') && arg.RightTop){
-                x = window.innerWidth;
-                y = 0;
+                p = 3;
             } else{
-                x = window.innerWidth;
-                y = window.innerHeight;
+                p = 4;
             }
-            var btn = createButton(x, y);
+            var btn = createButton(x, y, p);
             var vis = getVis();
             if(!vis)
                 btn.style.opacity = '0.0';
