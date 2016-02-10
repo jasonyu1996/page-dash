@@ -49,14 +49,15 @@
                     fid = null;
                 }
             };
-            btn.addEventListener('click', function(){
+            var startScroll = function(){
                 clearScroll();
                 sid = setInterval(function(){
                     document.documentElement.scrollTop -= Math.max(1, Math.min(document.documentElement.scrollTop / 20, 10));
                     if(document.documentElement.scrollTop == 0)
                         clearScroll();
                 }, 10);
-            }, false);
+            };
+            btn.addEventListener('click', startScroll, false);
             window.addEventListener('scroll', function(){
                 var nvis = getVis();
                 if(nvis ^ vis){
@@ -84,6 +85,10 @@
                         }, 10);
                     }
                 }
+            }, false);
+            window.addEventListener('keydown', function(e){
+                if(e.keyCode == 68 && e.ctrlKey && e.shiftKey)
+                    startScroll();
             }, false);
             document.body.appendChild(btn);
         };
