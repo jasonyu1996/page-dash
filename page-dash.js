@@ -31,13 +31,10 @@
             }
             var btn = createButton(x, y);
             var vis = getVis();
-            if(!vis){
+            if(!vis)
                 btn.style.opacity = '0.0';
-                btn.style.display = "none";
-            } else{
+            else
                 btn.style.opacity = '1.0';
-                btn.style.display = "";
-            }
             var sid = null; //scrolling instance
             var fid = null; //fading instance
             var clearScroll = function(){
@@ -66,7 +63,6 @@
                     vis = nvis;
                     clearFade();
                     if(nvis){
-                        btn.style.display = "";
                         var o = Number(btn.style.opacity) * 100;
                         fid = setInterval(function(){
                             o += 3;
@@ -83,10 +79,8 @@
                             if(o < 0)
                                 o = 0;
                             btn.style.opacity = String(o / 100.0);
-                            if(fid == 0){
-                                btn.style.display = "none";
+                            if(fid == 0)
                                 clearFade();
-                            }
                         }, 10);
                     }
                 }
