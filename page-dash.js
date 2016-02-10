@@ -26,6 +26,8 @@
     };
     var PageDash = function(){
         PageDash.prototype.init = function(arg){
+            if(!arg)
+                arg = { RightBottom: true};
             var x = 0, y = 0, p = 0;
             if(arg.hasOwnProperty('x') && arg.hasOwnProperty('y')){
                 x = Number(arg.x);
