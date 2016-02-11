@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>The page-dash Project</title>
+        <link rel="stylesheet" href="page-dash-default.css">
+        <script src="page-dash.js"></script>
+    </head>
+    <body>
+        <div class="page">
+            <div class="page-header">
+                <h1>The page-dash Project</h1>
+                <h2>A back-to-top solution</h2>
+            </div>
+            <div class="page-body">
+                <h2>Introduction</h2>
+                <p><em>page-dash</em> provides a simple button hovering over a web page. When The button is clicked, the screen will be moved to the top of the page.</p>
+                <p>It is actually homework of Labmu.</p>
+                <h2>Usage</h2>
+                <p>To use <em>page-dash</em>, simply load the script and stylesheet, and invoke <code>PageDash.init(arg)</code>.</p>
+                <p><code>arg</code> is the parameters specifying where to place the button. <code>arg</code> should be an object with a subset of the following attributes:</p>
+                <ul>
+                    <li><code>x</code></li>
+                    <li><code>y</code></li>
+                    <li><code>LeftTop</code></li>
+                    <li><code>LeftBottom</code></li>
+                    <li><code>RightTop</code></li>
+                    <li><code>RightBottom</code></li>
+                </ul>
+                <p>You can choose to set <code>x</code> and <code>y</code> to fix the button at position <code>(x, y)</code> Or you can choose one of the four corners and set the attribute value to true, so the button would be placed in a corner.</p>
+                <p>If you give an invalid <code>arg</code> or simply use <code>PageDash.init()</code> the button would be placed in the right bottom corner.</p>
+                <h2>Demonstration</h2>
+                <p>In order to give a demonstration, we put part of a wikipedia page below.</p>
+                <iframe src="https://en.wikipedia.org/wiki/Wikipedia" width="100%" height="2000px" scrolling="no" frameborder="0"></iframe>
+            </div>
+            <p>You can change the position of the button.</p>
+            <p>Coordinate <input type="radio" name="posOption" id="coOpt" class="radio"></p>
+            <p>X:<input type="text" name="x" readonly="true" id="xBox"></p>
+            <p>Y:<input type="text" name="y" readonly="true" id="yBox"></p>
+            <p>Left Top <input type="radio" name="posOption" id="leftTop" class="radio"></p>
+            <p>Left Bottom <input type="radio" name="posOption" id="leftBottom" class="radio"></p>
+            <p>Right Top <input type="radio" name="posOption" id="rightTop" class="radio"></p>
+            <p>Right Bottom <input type="radio" name="posOption" id="rightBottom" checked="checked" class="radio"></p>
+            <p><button id="reset">Reset</button></p>
+            <div class="page-footer">
+            </div>
+        </div>
+        <script>
+            var xBox = document.getElementById('xBox');
+            var yBox = document.getElementById('yBox');
+            var x, y;
+            var radios = document.getElementsByClassName('radio');
+            PageDash.init({RightBottom: true});
+            function refresh(){
+                xBox.readOnly = yBox.readOnly = !radios[0].checked;
+            }
+            refresh();
+            for(var i = 0; i < radios.length; i ++)
+                radios[i].addEventListener('click', refresh, false);
+            document.getElementById('reset').onclick = function(){
+                if(radios[0].checked){
+                    x = Number(xBox.value);
+                    y = Number(yBox.value);
+                    if(isNaN(x) || isNaN(y)){
+                        alert('Please give x and y in legal form!');
+                        return;
+                    }
+                    PageDash.init({x: x, y: y});
+                } else if(radios[1].checked){
+                    PageDash.init({LeftTop: true});
+                } else if(radios[2].checked){
+                    PageDash.init({LeftBottom: true});
+                } else if(radios[3].checked){
+                    PageDash.init({RightTop: true});
+                } else{
+                    PageDash.init({RightBottom: true});
+                }
+            };
+        </script>
+    </body>
+</html>

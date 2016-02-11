@@ -25,7 +25,12 @@
         return document.documentElement.scrollTop > vis_eps;
     };
     var PageDash = function(){
+        this.btn = null;
         PageDash.prototype.init = function(arg){
+            if(this.btn){
+                document.body.removeChild(this.btn);
+                this.btn = null;
+            }
             if(!arg)
                 arg = { RightBottom: true};
             var x = 0, y = 0, p = 0;
@@ -103,6 +108,7 @@
                     startScroll();
             }, false);
             document.body.appendChild(btn);
+            this.btn = btn;
         };
     };
     window.PageDash = new PageDash();
